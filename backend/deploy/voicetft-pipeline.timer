@@ -1,0 +1,11 @@
+# Installed as /etc/systemd/system/voicetft-pipeline.timer
+[Unit]
+Description=Run voicetft stats pipeline every 6 hours
+
+[Timer]
+OnCalendar=*-*-* 00/6:30:00
+RandomizedDelaySec=10m
+Persistent=true
+
+[Install]
+WantedBy=timers.target

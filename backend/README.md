@@ -63,7 +63,7 @@ See `docs/architecture.md` for the full rationale.
    scaffolded with per-route rate limiting (verify league field names when key arrives)
 4. ✅ aggregation rollups (案Z filter + comp heuristic) — E2E-tested on fixtures
 5. ✅ JSON snapshot export + sha256 manifest
-6. publish to `voicetft-data` (jsDelivr) + VPS deploy: systemd timers, backups, retention
+6. ✅ deploy assets: systemd service/timer + pipeline script + `docs/deploy.md` (VPS provisioning itself is manual)
 
 Only phase 3's *live* path waits on the Riot API key — flip `--source riot`.
 
