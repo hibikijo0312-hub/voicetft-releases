@@ -1,0 +1,24 @@
+# Local Postgres 16 for development.
+# On first start, the SQL files in ./migrations are applied in lexical order
+# (0001 -> 0004) via the postgres initdb hook, giving you a ready schema.
+# The real deploy path uses `sqlx migrate run` against the same files.
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: voicetft
+      POSTGRES_USER: voicetft
+      POSTGRES_PASSWORD: voicetft
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U voicetft -d voicetft"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:
