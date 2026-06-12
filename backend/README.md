@@ -19,6 +19,13 @@ backend/
     0002_players.sql  # summoners, ranked_entries (Master+ set), crawl_state
     0003_matches.sql  # matches (raw jsonb), partitioned BY LIST (patch)
     0004_stats.sql    # stat_snapshots + comp/unit/unit_item/item/augment/trait stats
+  src/                # Rust binary `voicetft` (sqlx + tokio + reqwest)
+    cdragon.rs        # Phase 2: CDragon static ingest (no Riot key)
+    riot.rs           # Phase 3: RiotSource trait, FixtureSource + HttpRiotSource (rate-limited)
+    crawl.rs          # league snapshot -> incremental match ids -> dedup -> raw insert
+    aggregate.rs      # Phase 4: per-patch rollup, 案Z filter, carry+trait comp heuristic
+    export.rs         # Phase 5: versioned JSON + sha256 manifest
+  fixtures/           # synthetic Set17 matches (real CDragon api names) for keyless dev
   docker-compose.yml  # local Postgres 16, auto-applies migrations on first start
 ```
 
@@ -26,8 +33,17 @@ backend/
 ```sh
 cd backend
 docker compose up -d          # Postgres 16 on :5432, schema applied from migrations/
-psql postgresql://voicetft:voicetft@localhost:5432/voicetft -c '\dt'
+export DATABASE_URL=postgresql://voicetft:voicetft@localhost:5432/voicetft
+
+cargo run -- migrate          # no-op if compose already applied; canonical path on VPS
+cargo run -- static-refresh   # live CDragon -> sets/patches/units/traits/items/augments
+cargo run -- crawl --source fixture --platforms kr       # keyless: fixture matches
+cargo run -- aggregate --patch 16.12 --set 17 \
+  --min-games-comp 5 --min-games-pair 3 --min-games-entity 3   # low thresholds for fixtures
+cargo run -- export --out export                          # JSON snapshot + manifest.json
 ```
+When the Riot key arrives: `RIOT_API_KEY=... cargo run -- crawl --source riot --platforms kr,euw1,na1,...`
+(production thresholds: defaults `--min-games-comp 200 --min-games-pair 50 --min-games-entity 20`).
 
 ## Design summary
 - **PostgreSQL 16**, VPS-hosted, systemd-timer scheduled.
@@ -41,14 +57,15 @@ psql postgresql://voicetft:voicetft@localhost:5432/voicetft -c '\dt'
 See `docs/architecture.md` for the full rationale.
 
 ## Build phases
-1. ✅ schema + migrations + docker-compose (this folder)
-2. CDragon static ingest (no Riot key)
-3. Riot ingest behind a trait + fixture impl (no key for the fixture path)
-4. aggregation rollups + tests (no key)
-5. JSON snapshot export + manifest + publish (no key)
-6. VPS deploy: systemd timers, backups, retention (no key)
+1. ✅ schema + migrations + docker-compose
+2. ✅ CDragon static ingest — verified against live CDragon (Set 17, patch 16.12)
+3. ✅ Riot ingest behind `RiotSource` trait; `FixtureSource` done, `HttpRiotSource`
+   scaffolded with per-route rate limiting (verify league field names when key arrives)
+4. ✅ aggregation rollups (案Z filter + comp heuristic) — E2E-tested on fixtures
+5. ✅ JSON snapshot export + sha256 manifest
+6. publish to `voicetft-data` (jsDelivr) + VPS deploy: systemd timers, backups, retention
 
-Only phase 3's *live* implementation waits on the Riot API key.
+Only phase 3's *live* path waits on the Riot API key — flip `--source riot`.
 
 ## Moving to voicetft-backend
 Once the private `voicetft-backend` repo exists:
