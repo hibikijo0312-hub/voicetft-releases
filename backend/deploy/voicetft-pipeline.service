@@ -1,0 +1,16 @@
+# Full pipeline run: static refresh -> crawl -> aggregate -> export.
+# Installed as /etc/systemd/system/voicetft-pipeline.service
+# Requires /etc/voicetft/env with DATABASE_URL (+ RIOT_API_KEY once granted).
+[Unit]
+Description=voicetft stats pipeline (crawl + aggregate + export)
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=voicetft
+EnvironmentFile=/etc/voicetft/env
+WorkingDirectory=/opt/voicetft-backend
+ExecStart=/opt/voicetft-backend/bin/run-pipeline.sh
+TimeoutStartSec=4h
+Nice=10

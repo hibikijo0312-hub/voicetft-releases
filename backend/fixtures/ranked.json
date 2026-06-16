@@ -1,0 +1,98 @@
+[
+ {
+  "puuid": "PUUID_FIXTURE_00",
+  "platform": "kr",
+  "tier": "CHALLENGER",
+  "league_points": 1200
+ },
+ {
+  "puuid": "PUUID_FIXTURE_01",
+  "platform": "kr",
+  "tier": "CHALLENGER",
+  "league_points": 1150
+ },
+ {
+  "puuid": "PUUID_FIXTURE_02",
+  "platform": "kr",
+  "tier": "CHALLENGER",
+  "league_points": 1100
+ },
+ {
+  "puuid": "PUUID_FIXTURE_03",
+  "platform": "kr",
+  "tier": "CHALLENGER",
+  "league_points": 1050
+ },
+ {
+  "puuid": "PUUID_FIXTURE_04",
+  "platform": "kr",
+  "tier": "GRANDMASTER",
+  "league_points": 1000
+ },
+ {
+  "puuid": "PUUID_FIXTURE_05",
+  "platform": "kr",
+  "tier": "GRANDMASTER",
+  "league_points": 950
+ },
+ {
+  "puuid": "PUUID_FIXTURE_06",
+  "platform": "kr",
+  "tier": "GRANDMASTER",
+  "league_points": 900
+ },
+ {
+  "puuid": "PUUID_FIXTURE_07",
+  "platform": "kr",
+  "tier": "GRANDMASTER",
+  "league_points": 850
+ },
+ {
+  "puuid": "PUUID_FIXTURE_08",
+  "platform": "kr",
+  "tier": "MASTER",
+  "league_points": 800
+ },
+ {
+  "puuid": "PUUID_FIXTURE_09",
+  "platform": "kr",
+  "tier": "MASTER",
+  "league_points": 750
+ },
+ {
+  "puuid": "PUUID_FIXTURE_10",
+  "platform": "kr",
+  "tier": "MASTER",
+  "league_points": 700
+ },
+ {
+  "puuid": "PUUID_FIXTURE_11",
+  "platform": "kr",
+  "tier": "MASTER",
+  "league_points": 650
+ },
+ {
+  "puuid": "PUUID_FIXTURE_12",
+  "platform": "kr",
+  "tier": "MASTER",
+  "league_points": 600
+ },
+ {
+  "puuid": "PUUID_FIXTURE_13",
+  "platform": "kr",
+  "tier": "MASTER",
+  "league_points": 550
+ },
+ {
+  "puuid": "PUUID_FIXTURE_14",
+  "platform": "kr",
+  "tier": "MASTER",
+  "league_points": 500
+ },
+ {
+  "puuid": "PUUID_FIXTURE_15",
+  "platform": "kr",
+  "tier": "MASTER",
+  "league_points": 450
+ }
+]
